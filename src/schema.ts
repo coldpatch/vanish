@@ -13,7 +13,7 @@ export const emails = sqliteTable(
 			.notNull(),
 		hasAttachments: integer('has_attachments', { mode: 'boolean' }).notNull().default(false),
 	},
-	(table) => [index('emails_received_at_id_idx').on(table.receivedAt, table.id)]
+	(table) => [index('emails_received_at_id_idx').on(table.receivedAt, table.id)],
 );
 
 export const emailRecipients = sqliteTable(
@@ -25,7 +25,7 @@ export const emailRecipients = sqliteTable(
 			.references(() => emails.id, { onDelete: 'cascade' }),
 		address: text('address').notNull(),
 	},
-	(table) => [index('email_recipients_addr_email_idx').on(table.address, table.emailId)]
+	(table) => [index('email_recipients_addr_email_idx').on(table.address, table.emailId)],
 );
 
 export const attachments = sqliteTable(
@@ -42,7 +42,7 @@ export const attachments = sqliteTable(
 			.$defaultFn(() => new Date())
 			.notNull(),
 	},
-	(table) => [index('attachments_email_id_idx').on(table.emailId)]
+	(table) => [index('attachments_email_id_idx').on(table.emailId)],
 );
 
 export type Email = typeof emails.$inferSelect;

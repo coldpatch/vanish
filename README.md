@@ -1,5 +1,7 @@
 # Vanish Email
 
+[![CI](https://github.com/coldpatch/vanish/actions/workflows/ci.yml/badge.svg)](https://github.com/coldpatch/vanish/actions/workflows/ci.yml)
+
 A simple, lightweight (<550 LOC) Cloudflare Worker that provides a temporary email inbox service that scales with full attachment support.
 
 **Demo:** [https://vanish.host](https://vanish.host)
@@ -219,7 +221,13 @@ bun run deploy
 | **Development**         | `bun run dev`          | Start local development server            |
 | **Start**               | `bun run start`        | Alias for `bun run dev`                   |
 | **Deploy**              | `bun run deploy`       | Deploy to Cloudflare Workers              |
-| **Test**                | `bun run test`         | Run tests with Vitest                     |
+| **Test**                | `bun run test`         | Run tests with Vitest (watch mode)        |
+| **Test (CI)**           | `bun run test:run`     | Run tests once                            |
+| **Lint**                | `bun run lint`         | Run ESLint                                |
+| **Lint (Fix)**          | `bun run lint:fix`     | Run ESLint and fix issues                 |
+| **Format**              | `bun run format`       | Format code with Prettier                 |
+| **Format (Check)**      | `bun run format:check` | Check code formatting                     |
+| **Type Check**          | `bun run typecheck`    | Run TypeScript type checking              |
 | **Migrate (Local)**     | `bun run migrate`      | Apply D1 migrations locally               |
 | **Migrate (Prod)**      | `bun run migrate:prod` | Apply D1 migrations to production         |
 | **Generate Migrations** | `bun run generate`     | Generate new migrations with Drizzle Kit  |

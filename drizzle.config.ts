@@ -10,9 +10,7 @@ const getLocalD1 = () => {
 		.find((f) => f.endsWith('.sqlite') && f.toLowerCase().includes('d1'));
 
 	if (!dbFile) {
-		throw new Error(
-			`D1 database file not found in ${basePath} - have you created and attached a D1 database to this project?`
-		);
+		throw new Error(`D1 database file not found in ${basePath} - have you created and attached a D1 database to this project?`);
 	}
 
 	const url = path.resolve(basePath, dbFile);
@@ -27,6 +25,6 @@ export default defineConfig({
 	dialect: 'sqlite',
 	out: './migrations',
 	dbCredentials: {
-		url: getLocalD1()
-	}
+		url: getLocalD1(),
+	},
 });

@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import PostalMime, { Attachment } from 'postal-mime';
 import { drizzle } from 'drizzle-orm/d1';
-import { and, eq, or, lt, like, inArray, desc, count } from 'drizzle-orm';
+import { and, eq, or, lt, inArray, desc, count } from 'drizzle-orm';
 import { describeRoute, openAPIRouteHandler, resolver, validator } from 'hono-openapi';
 import { z } from 'zod';
 import * as schema from './schema';
@@ -142,7 +142,7 @@ app.post(
 					.regex(/^[a-z0-9._-]+$/i)
 					.optional(),
 			})
-			.optional()
+			.optional(),
 	),
 	(c) => {
 		const body = c.req.valid('json') ?? {};
@@ -150,7 +150,7 @@ app.post(
 		return c.json({
 			email: generateUniqueEmailAddress(body.domain ?? domains[Math.floor(Math.random() * domains.length)], domains, body.prefix),
 		});
-	}
+	},
 );
 
 app.get(
@@ -172,13 +172,13 @@ app.get(
 				.max(64)
 				.regex(/^[a-z0-9._-]+$/i)
 				.optional(),
-		})
+		}),
 	),
 	(c) => {
 		const { domain, prefix } = c.req.valid('query');
 		const domains = c.env.DOMAINS.split(',');
 		return c.json({ email: generateUniqueEmailAddress(domain ?? domains[Math.floor(Math.random() * domains.length)], domains, prefix) });
-	}
+	},
 );
 
 app.get(
@@ -193,7 +193,7 @@ app.get(
 			},
 		},
 	}),
-	(c) => c.json({ domains: c.env.DOMAINS.split(',') })
+	(c) => c.json({ domains: c.env.DOMAINS.split(',') }),
 );
 
 app.get(
@@ -212,7 +212,7 @@ app.get(
 		z.object({
 			limit: z.coerce.number().int().min(1).max(100).default(20),
 			cursor: z.string().optional(),
-		})
+		}),
 	),
 	async (c) => {
 		const { address } = c.req.valid('param');
@@ -259,7 +259,7 @@ app.get(
 			nextCursor,
 			total,
 		});
-	}
+	},
 );
 
 app.delete(
@@ -295,7 +295,7 @@ app.delete(
 		]);
 
 		return c.json({ deleted: emailIds.length });
-	}
+	},
 );
 
 app.get(
@@ -325,7 +325,7 @@ app.get(
 		if (!email) return c.json({ error: 'Email not found' }, 404);
 
 		return c.json({ ...email, to: recipients.map((r) => r.address), attachments: atts });
-	}
+	},
 );
 
 app.get(
@@ -348,7 +348,7 @@ app.get(
 		object.writeHttpMetadata(headers);
 		headers.set('etag', object.httpEtag);
 		return new Response(object.body, { headers });
-	}
+	},
 );
 
 app.delete(
@@ -373,7 +373,7 @@ app.delete(
 		]);
 
 		return c.json({ success: true });
-	}
+	},
 );
 
 export default {
@@ -402,7 +402,7 @@ export default {
 				toAddresses.map((addr) => ({
 					emailId,
 					address: addr,
-				}))
+				})),
 			),
 		]);
 
@@ -412,7 +412,7 @@ export default {
 	},
 
 	async scheduled(event, env, ctx) {
-		if (event.cron !== '0 */2 * * *') return;
+		if (event.cron !== '0 * * * *') return;
 
 		ctx.waitUntil(
 			(async () => {
@@ -434,7 +434,7 @@ export default {
 				if (deletedAtts.length > 0) {
 					await env.R2.delete(deletedAtts.map((a) => `${a.emailId}/${a.id}`));
 				}
-			})()
+			})(),
 		);
 	},
 } satisfies ExportedHandler<Env>;
@@ -480,7 +480,7 @@ async function saveAttachmentsBatch(validAttachments: ValidAttachment[], emailId
 			r2.put(`${emailId}/${id}`, attachment.content, {
 				httpMetadata: { contentType, contentDisposition: `attachment; filename="${filename}"` },
 				customMetadata: { originalFilename: filename, uploadedAt: Date.now().toString() },
-			})
+			}),
 		);
 	}
 

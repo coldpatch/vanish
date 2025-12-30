@@ -9,29 +9,32 @@
 	"compatibility_date": "2025-12-29",
 	"compatibility_flags": ["nodejs_als"],
 	"observability": {
-		"enabled": true
+		"enabled": true,
 	},
 	"d1_databases": [
 		{
 			"binding": "DB",
 			"database_name": "vanish",
 			"database_id": "713c1414-2f99-4f8e-bbcc-555de1a53f4a",
-			"migrations_dir": "./migrations"
-		}
+			"migrations_dir": "./migrations",
+		},
 	],
 	"r2_buckets": [
 		{
 			"bucket_name": "vanish",
-			"binding": "R2"
-		}
+			"binding": "R2",
+		},
 	],
 	"routes": [
 		{
 			"pattern": "vanish.host",
-			"custom_domain": true
-		}
+			"custom_domain": true,
+		},
 	],
 	"vars": {
-		"DOMAINS": "vanish.host"
-	}
+		"DOMAINS": "vanish.host",
+	},
+	"triggers": {
+		"crons": ["0 * * * *"],
+	},
 }
